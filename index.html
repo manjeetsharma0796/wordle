@@ -1,16 +1,22 @@
 <html>
+  <head>
+    <title>Wordle</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="index.js"></script>
+  </head>
 
-<head>
-  <title>Wordle</title>
-  <link rel="stylesheet" href="wordle.css">
-</head>
-
-<body>
-  <h1 id="heading">Wordle</h1>
-  <section id="input-section">
-    <input type="Guess" maxlength="5" placeholder="Guess word here" id="guess-area">
-    <input type="button" value="Guess" id="guess-button">
-  </section>
-</body>
-
+  <body>
+    <h1 id="heading">Wordle</h1>
+    <section id="input-section">
+      <input
+        type="Guess"
+        maxlength="5"
+        placeholder="Guess word here"
+        id="guess-area"
+      />
+      <input type="button" value="Guess" id="guess-button" />
+    </section>
+    <p>Result:</p>
+    <p id="result"></p>
+  </body>
 </html>
