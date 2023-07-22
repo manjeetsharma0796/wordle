@@ -5,3 +5,84 @@ flow---
 get word
 check 
 display result
+
+------------------------
+what are the data that is imported from me
+
+1. guessedHistory
+2. chancesLeft
+3. result
+
+
+
+const Player {
+  constructor() {
+    this.#playerGuessedHistory = [];
+    this.hasWon = false;  
+  }
+  
+  get status() {
+    const hasWon
+  }
+}
+
+
+class Game {
+  contructor(player, word, totalChance) {
+    this.player = player;
+    this.correctWord = word;
+    this.totalChance = totalChance;
+    this.chanceLeft = totalChance;
+
+    this.hasGuessed = false;
+  }
+
+  updateGame(guessedWord) {
+    this.#player.registerGuess(guessedWord);
+    this.hasWon = this.isCorrectGuess(guessedWord);
+    this.chanceLeft = this.chanceLeft - 1;
+  }
+
+  isGameOver() {
+    this.chanceLeft === 0 || this.hasGuessed ? true: false;
+  }
+}
+
+class Controller {
+  constructor(game, renderer) {
+    this.game = game;
+    this.renderer = renderer;
+  }
+
+  takeGuess(guessedWord){
+    if(this.game.isGameOver()){
+      return;
+    };
+
+    this.game.updategame(guessedWord);
+    this.renderer.render();
+  }
+
+  start() {
+    will do some initialising and 
+    this.renderer.render()
+  }
+}
+
+class Renderer {
+  constructor(guessElement, 
+  guessButton, 
+  guessHistory, 
+  resultElement, 
+  chancesLeft) {
+    this.guessElement = guessElement;
+    this.guessButton = guessButton;
+    this.resultElement = resultElement;
+    this.chancesLeft = chancesLeft;
+    this.guessHistory = guessHistory;
+  }
+
+  render() {
+
+  }
+}
