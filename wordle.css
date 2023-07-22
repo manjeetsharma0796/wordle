@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+
+}
+
+body{
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+}
+
+#heading {
+  height: 5%;
+  width: 30%;
+  text-align: center;
+  margin: 1em auto;
+}
+
+#input-section {
+  width: 30%;
+  height: 10%;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 1em auto;
+}
+
+#input-section * {
+  height: 30px;
+}
+
+#guess-button {
+  width: 15%;
+  height: 40%;
+}
+
+#guess-area {
+  width: 45%;
+  height: 40%;
+}
