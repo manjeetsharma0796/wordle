@@ -1,0 +1,7 @@
+hardcode the word
+
+flow---
+
+get word
+check 
+display result

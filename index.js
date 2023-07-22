@@ -1,10 +1,9 @@
 const guessOutcomeAndDisplay = (word, resultElement) => {
   const guessedWordElement = document.querySelector("#guess-area");
-  console.log(guessedWordElement.value);
   if (guessedWordElement.value === word) {
-    resultElement.innerText = "correct";
+    resultElement.innerText = "Correct";
   }
-  resultElement.innerText = "incorrect";
+  resultElement.innerText = "Incorrect";
 };
 
 window.onload = () => {
