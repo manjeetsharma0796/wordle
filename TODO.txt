@@ -15,7 +15,7 @@ what are the data that is imported from me
 
 
 
-const Player {
+class Player {
   constructor() {
     this.#playerGuessedHistory = [];
     this.hasWon = false;  
@@ -83,6 +83,8 @@ class Renderer {
   }
 
   render() {
-
+    #renderResult();
+    #renderGuessChanceLeft();
+    #renderGuessMade();
   }
 }
