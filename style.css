@@ -53,3 +53,9 @@ body {
 #guess-history{
   line-height: 2em;
 }
+
+.flexRow{
+  display: flex;
+  flex-flow: row wrap;
+  column-gap: 1em;
+}
