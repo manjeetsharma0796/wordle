@@ -5,8 +5,8 @@ class Player {
     this.#guessedHistory = [];
   }
 
-  registerGuess(guessedWord) {
-    this.#guessedHistory.push(guessedWord);
+  registerGuess(guessedWord, correctLetters) {
+    this.#guessedHistory.push({ guessedWord, correctLetters });
   }
 
   get guessHistory() {
@@ -20,6 +20,8 @@ class Game {
   #totalChance;
   #chanceLeft;
   #guessed;
+  #correctLetters;
+
   constructor(player, word, totalChance) {
     this.#player = player;
     this.#correctWord = word;
@@ -32,20 +34,35 @@ class Game {
     return guessedWord === this.#correctWord;
   }
 
+  #countCorrectLetters(guessedWord) {
+    const correctLetters = {};
+
+    [...guessedWord].forEach((letter) => {
+      if (this.#correctWord.includes(letter)) {
+        correctLetters[letter] = true;
+      }
+    });
+
+    return Object.keys(correctLetters).length;
+  }
+
   updateGame(guessedWord) {
-    this.#player.registerGuess(guessedWord);
     this.#guessed = this.isGuessCorrect(guessedWord);
+    this.#countCorrectLetters(guessedWord);
+    const correctLetters = this.#countCorrectLetters(guessedWord);
+    this.#player.registerGuess(guessedWord, correctLetters);
     this.#chanceLeft = this.#chanceLeft - 1;
   }
 
   isGameOver() {
-    return this.#chanceLeft === 0 || this.#guessed ? true : false;
+    return this.#chanceLeft === 0 || this.#guessed;
   }
 
   get status() {
     const guessedHistory = [...this.#player.guessHistory];
     const guessed = this.#guessed;
     const chanceLeft = this.#chanceLeft;
+
     return { guessed, guessedHistory, chanceLeft };
   }
 }
@@ -62,7 +79,7 @@ class Controller {
     }
 
     this.game.updateGame(guessedWord);
-    const status = this.game.status;
+    const status = { ...this.game.status };
     this.renderer.render(status);
   }
 }
@@ -74,20 +91,47 @@ class Renderer {
     this.guessedHistory = document.querySelector("#guess-history");
   }
 
+  #createGuessContainer() {
+    const guessContainer = document.createElement("section");
+    guessContainer.classList.add("flexRow");
+    return guessContainer;
+  }
+
+  #createGuessElement(guessedWord) {
+    const guessElement = document.createElement("p");
+    guessElement.innerText = guessedWord;
+
+    return guessElement;
+  }
+
+  #createCorrectLetterElement(correctLetters) {
+    const correctLettersElement = document.createElement("p");
+    correctLettersElement.innerText = `Correct Letters: ${correctLetters}`;
+    return correctLettersElement;
+  }
+
   #renderGuessHistory(guessHistory) {
     this.guessedHistory.replaceChildren();
 
     guessHistory.forEach((guess) => {
-      const guessElement = document.createElement("p");
-      guessElement.innerText = guess;
-      this.guessedHistory.appendChild(guessElement);
+      const { guessedWord, correctLetters } = guess;
+      const guessContainer = this.#createGuessContainer();
+
+      const guessElement = this.#createGuessElement(guessedWord);
+
+      const correctLettersElement =
+        this.#createCorrectLetterElement(correctLetters);
+
+      guessContainer.appendChild(guessElement);
+      guessContainer.appendChild(correctLettersElement);
+      this.guessedHistory.appendChild(guessContainer);
     });
   }
 
   render(status) {
     const { guessed, guessedHistory, chanceLeft } = status;
 
-    this.resultElement.innerText = guessed ? "correct" : "incorrect";
+    this.resultElement.innerText = guessed ? "Correct" : "Incorrect";
     this.chancesLeft.innerText = chanceLeft;
     this.#renderGuessHistory(guessedHistory);
   }
@@ -95,12 +139,11 @@ class Renderer {
 
 window.onload = () => {
   const guessButton = document.querySelector("#guess-button");
-  const resultElement = document.querySelector("#result");
   const guessedWordElement = document.querySelector("#guess-area");
   const word = "hello";
   const totalChance = 2;
 
-  const renderer = new Renderer(resultElement);
+  const renderer = new Renderer();
   const player = new Player();
 
   const game = new Game(player, word, totalChance);
