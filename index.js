@@ -193,7 +193,7 @@ class Renderer {
   }
 
   render(status) {
-    const { guessed, guessedHistory, chanceLeft, correctStats } = status;
+    const { guessed, guessedHistory, chanceLeft } = status;
 
     this.resultElement.innerText = guessed ? "Correct" : "Incorrect";
     this.chancesLeft.innerText = chanceLeft;

@@ -94,7 +94,32 @@ Requirement 3
 
 to render new template needed expectation is 
 
- <section class="flexRow">               // a container with class flexRow
+ <section class="flex-row">               // a container with class flex-row
    <p>hello</p>                               //guessedWord
    <p>Correct Letters: <span>3</span> </p>    //a subcontainer with correct letters with child count
  </section>
+
+----------------
+
+
+
+summary = [{b: {isPresent: true, isCorrectPosition: true}}]
+
+const word = 'brown';
+
+const guessedWord = 'brown';
+const summary = {};
+
+[...guessedWord].forEach ((letter, index) => {
+  let isPresent = false;
+  let isCorrectPosition = false;
+
+  if(word.includes(letter)) {
+    isPresent = true;
+    if(index === word.indexOf(letter)) {
+      isCorrectPosition = true;
+    }
+  }
+  summary[letter] = {isPresent, isCorrectPosition};
+  
+  })
