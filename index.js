@@ -20,7 +20,7 @@ class Game {
   #totalChance;
   #chanceLeft;
   #guessed;
-  #correctLetters;
+  #correctFrequency;
 
   constructor(player, word, totalChance) {
     this.#player = player;
@@ -28,27 +28,49 @@ class Game {
     this.#totalChance = totalChance;
     this.#chanceLeft = totalChance;
     this.#guessed = false;
+    this.#correctFrequency = {};
   }
 
   isGuessCorrect(guessedWord) {
     return guessedWord === this.#correctWord;
   }
 
-  #countCorrectLetters(guessedWord) {
-    const correctLetters = {};
-
-    [...guessedWord].forEach((letter) => {
-      if (this.#correctWord.includes(letter)) {
-        correctLetters[letter] = true;
+  #countFrequency(word) {
+    return [...word].reduce((freq, letter) => {
+      if (freq[letter] === undefined) {
+        freq[letter] = 0;
       }
-    });
+      freq[letter] += 1;
+      return freq;
+    }, {});
+  }
 
-    return Object.keys(correctLetters).length;
+  #calculateMatchLetter(count, guessWithCount) {
+    const [guessedLetter, guessedCount] = guessWithCount;
+    const correctFrequency = this.#correctFrequency;
+
+    if (!correctFrequency[guessedLetter]) return count;
+
+    let toAdd = 0;
+    const correctCount = correctFrequency[guessedLetter];
+    toAdd = guessedCount < correctCount ? guessedCount : correctCount;
+
+    return count + toAdd;
+  }
+
+  #countCorrectLetters(guessedWord) {
+    this.#correctFrequency = this.#countFrequency(this.#correctWord);
+    const guessedFrequency = this.#countFrequency(guessedWord);
+
+    return Object.entries(guessedFrequency).reduce(
+      (count, guessWithCount) =>
+        this.#calculateMatchLetter(count, guessWithCount),
+      0
+    );
   }
 
   updateGame(guessedWord) {
     this.#guessed = this.isGuessCorrect(guessedWord);
-    this.#countCorrectLetters(guessedWord);
     const correctLetters = this.#countCorrectLetters(guessedWord);
     this.#player.registerGuess(guessedWord, correctLetters);
     this.#chanceLeft = this.#chanceLeft - 1;
@@ -142,7 +164,6 @@ window.onload = () => {
   const guessedWordElement = document.querySelector("#guess-area");
   const word = "hello";
   const totalChance = 2;
-
   const renderer = new Renderer();
   const player = new Player();
 
