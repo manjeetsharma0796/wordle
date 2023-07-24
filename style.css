@@ -50,12 +50,35 @@ body {
   row-gap: 1em;
 }
 
-#guess-history{
+#guess-history {
   line-height: 2em;
 }
 
-.flexRow{
+.flex-row {
   display: flex;
   flex-flow: row wrap;
   column-gap: 1em;
+}
+
+.box {
+  height: 25px;
+  width: 25px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.green {
+  background-color: rgb(186, 255, 186);
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+#color-meaning {
+  display: block;
+  position: absolute;
+  top: 5%;
+  left: 80%;
 }
