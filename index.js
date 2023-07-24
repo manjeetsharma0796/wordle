@@ -21,7 +21,7 @@ class Game {
   #chanceLeft;
   #guessed;
   #correctFrequency;
-
+  #score;
   constructor(player, word, totalChance) {
     this.#player = player;
     this.#correctWord = word;
@@ -29,6 +29,7 @@ class Game {
     this.#chanceLeft = totalChance;
     this.#guessed = false;
     this.#correctFrequency = {};
+    this.#score = 0;
   }
 
   isGuessCorrect(guessedWord) {
@@ -86,16 +87,21 @@ class Game {
 
       summary.push({ letter: letter, isPresent, isCorrectPosition });
     });
-    console.log(summary);
     return summary;
+  }
+
+  #calculateScore() {
+    this.#score =
+      (this.#totalChance - (this.#totalChance - this.#chanceLeft) + 1) * 10;
   }
 
   updateGame(guessedWord) {
     this.#guessed = this.isGuessCorrect(guessedWord);
+    this.#chanceLeft = this.#chanceLeft - 1;
+    this.#calculateScore();
     const correctLetters = this.#countCorrectLetters(guessedWord);
     const correctStats = this.#calculateCorrectStats(guessedWord);
     this.#player.registerGuess(guessedWord, correctLetters, correctStats);
-    this.#chanceLeft = this.#chanceLeft - 1;
   }
 
   isGameOver() {
@@ -106,8 +112,9 @@ class Game {
     const guessedHistory = [...this.#player.guessHistory];
     const guessed = this.#guessed;
     const chanceLeft = this.#chanceLeft;
+    const score = this.#score;
 
-    return { guessed, guessedHistory, chanceLeft };
+    return { guessed, guessedHistory, chanceLeft, score };
   }
 }
 
@@ -133,6 +140,7 @@ class Renderer {
     this.resultElement = document.querySelector("#result");
     this.chancesLeft = document.querySelector("#chance-left");
     this.guessedHistory = document.querySelector("#guess-history");
+    this.scoreElement = document.querySelector("#score");
   }
 
   #createGuessContainer() {
@@ -141,14 +149,7 @@ class Renderer {
     return guessContainer;
   }
 
-  #createGuessElement(guessedWord) {
-    const guessElement = document.createElement("p");
-    guessElement.innerText = guessedWord;
-
-    return guessElement;
-  }
-
-  #createCorrectLetterCountElement(correctLetters) {
+  #createLetterCountElement(correctLetters) {
     const correctLettersElement = document.createElement("p");
     correctLettersElement.innerText = `Correct Letters: ${correctLetters}`;
     return correctLettersElement;
@@ -157,8 +158,6 @@ class Renderer {
   #renderLetter(correctStats, guessContainer) {
     correctStats.forEach((letterWithStat) => {
       const { letter, isPresent, isCorrectPosition } = letterWithStat;
-      console.log(letter, isPresent, isCorrectPosition);
-
       const letterElement = document.createElement("p");
 
       letterElement.classList.add("box");
@@ -185,7 +184,7 @@ class Renderer {
       const guessContainer = this.#createGuessContainer();
 
       const correctLettersElement =
-        this.#createCorrectLetterCountElement(correctLetters);
+        this.#createLetterCountElement(correctLetters);
 
       this.#renderLetter(correctStats, guessContainer);
 
@@ -194,12 +193,20 @@ class Renderer {
     });
   }
 
+  #renderScore(score) {
+    const scoreElement = this.scoreElement;
+    scoreElement.innerText = `Score: ${Number(score)}`;
+  }
+
   render(status) {
-    const { guessed, guessedHistory, chanceLeft } = status;
+    const { guessed, guessedHistory, chanceLeft, score } = status;
 
     this.resultElement.innerText = guessed ? "Correct" : "Incorrect";
     this.chancesLeft.innerText = chanceLeft;
     this.#renderGuessHistory(guessedHistory);
+    if (guessed || chanceLeft === 0) {
+      this.#renderScore(score);
+    }
   }
 }
 
@@ -207,7 +214,7 @@ window.onload = () => {
   const guessButton = document.querySelector("#guess-button");
   const guessedWordElement = document.querySelector("#guess-area");
   const word = "brown";
-  const totalChance = 2;
+  const totalChance = 6;
   const renderer = new Renderer();
   const player = new Player();
 
