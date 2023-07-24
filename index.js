@@ -70,8 +70,8 @@ class Game {
   }
 
   #calculateCorrectStats(guessedWord) {
-    const word = this.#correctWord;
-    const summary = {};
+    const word = [...this.#correctWord];
+    const summary = [];
 
     [...guessedWord].forEach((letter, index) => {
       let isPresent = false;
@@ -83,9 +83,10 @@ class Game {
           isCorrectPosition = true;
         }
       }
-      summary[letter] = { isPresent, isCorrectPosition };
-    });
 
+      summary.push({ letter: letter, isPresent, isCorrectPosition });
+    });
+    console.log(summary);
     return summary;
   }
 
@@ -154,9 +155,10 @@ class Renderer {
   }
 
   #renderLetter(correctStats, guessContainer) {
-    Object.entries(correctStats).forEach((letterWithStat) => {
-      const [letter, stats] = letterWithStat;
-      const { isPresent, isCorrectPosition } = stats;
+    correctStats.forEach((letterWithStat) => {
+      const { letter, isPresent, isCorrectPosition } = letterWithStat;
+      console.log(letter, isPresent, isCorrectPosition);
+
       const letterElement = document.createElement("p");
 
       letterElement.classList.add("box");
