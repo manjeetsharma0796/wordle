@@ -82,11 +82,12 @@ class Game {
         isPresent = true;
         if (index === word.indexOf(letter)) {
           isCorrectPosition = true;
+          word[index] = "'";
         }
       }
-
       summary.push({ letter: letter, isPresent, isCorrectPosition });
     });
+
     return summary;
   }
 
@@ -213,7 +214,19 @@ class Renderer {
 window.onload = () => {
   const guessButton = document.querySelector("#guess-button");
   const guessedWordElement = document.querySelector("#guess-area");
-  const word = "brown";
+  const words = [
+    "dream",
+    "guard",
+    "flood",
+    "adult",
+    "sight",
+    "alarm",
+    "force",
+    "wound",
+  ];
+
+  const randomIndex = Math.floor(Math.random() * 10) % 8;
+  const word = words[randomIndex];
   const totalChance = 6;
   const renderer = new Renderer();
   const player = new Player();
