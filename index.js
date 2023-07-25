@@ -125,21 +125,21 @@ class Renderer {
     return guessContainer;
   }
 
+  #appendClassToLetter(letterElement, isPresent, isCorrectPosition) {
+    if (isPresent) {
+      const color = isCorrectPosition ? "green" : "yellow";
+      letterElement.classList.add(color);
+    }
+    letterElement.classList.add("box");
+    letterElement.classList.add("flex-row");
+  }
+
   #renderLetter(correctStats, guessContainer) {
     correctStats.forEach((letterWithStat) => {
       const { letter, isPresent, isCorrectPosition } = letterWithStat;
       const letterElement = document.createElement("p");
 
-      letterElement.classList.add("box");
-
-      if (isPresent && isCorrectPosition) {
-        letterElement.classList.add("green");
-      }
-
-      if (isPresent && !isCorrectPosition) {
-        letterElement.classList.add("yellow");
-      }
-
+      this.#appendClassToLetter(letterElement, isPresent, isCorrectPosition);
       letterElement.innerText = letter.toUpperCase();
       guessContainer.appendChild(letterElement);
     });
@@ -167,6 +167,7 @@ class Renderer {
     const correctWordElement = this.correctWordElement;
     correctWordElement.innerText = `Correct Word: ${word.toUpperCase()}`;
   }
+
   render(status) {
     const { guessed, guessedHistory, chanceLeft, score, word } = status;
     this.guessArea.value = "";
@@ -174,7 +175,8 @@ class Renderer {
     this.#renderGuessHistory(guessedHistory);
     if (chanceLeft === 0 || guessed) {
       this.#renderCorrectWord(word);
-      guessed ? this.#renderScore(score) : this.#renderScore(0);
+      score = guessed ? score : 0;
+      this.#renderScore(score);
     }
   }
 }
