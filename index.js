@@ -5,8 +5,8 @@ class Player {
     this.#guessedHistory = [];
   }
 
-  registerGuess(guessedWord, correctLetters, correctStats) {
-    this.#guessedHistory.push({ guessedWord, correctLetters, correctStats });
+  registerGuess(guessedWord, correctStats) {
+    this.#guessedHistory.push({ guessedWord, correctStats });
   }
 
   get guessHistory() {
@@ -20,7 +20,6 @@ class Game {
   #totalChance;
   #chanceLeft;
   #guessed;
-  #correctFrequency;
   #score;
   constructor(player, word, totalChance) {
     this.#player = player;
@@ -28,7 +27,6 @@ class Game {
     this.#totalChance = totalChance;
     this.#chanceLeft = totalChance;
     this.#guessed = false;
-    this.#correctFrequency = {};
     this.#score = 0;
   }
 
@@ -36,56 +34,31 @@ class Game {
     return guessedWord === this.#correctWord;
   }
 
-  #countFrequency(word) {
-    return [...word].reduce((freq, letter) => {
-      if (freq[letter] === undefined) {
-        freq[letter] = 0;
-      }
-      freq[letter] += 1;
-      return freq;
-    }, {});
-  }
-
-  #calculateMatchLetter(count, guessWithCount) {
-    const [guessedLetter, guessedCount] = guessWithCount;
-    const correctFrequency = this.#correctFrequency;
-
-    if (!correctFrequency[guessedLetter]) return count;
-
-    let toAdd = 0;
-    const correctCount = correctFrequency[guessedLetter];
-    toAdd = guessedCount < correctCount ? guessedCount : correctCount;
-
-    return count + toAdd;
-  }
-
-  #countCorrectLetters(guessedWord) {
-    this.#correctFrequency = this.#countFrequency(this.#correctWord);
-    const guessedFrequency = this.#countFrequency(guessedWord);
-
-    return Object.entries(guessedFrequency).reduce(
-      (count, guessWithCount) =>
-        this.#calculateMatchLetter(count, guessWithCount),
-      0
-    );
-  }
-
   #calculateCorrectStats(guessedWord) {
     const word = [...this.#correctWord];
     const summary = [];
 
     [...guessedWord].forEach((letter, index) => {
-      let isPresent = false;
-      let isCorrectPosition = false;
-
-      if (word.includes(letter)) {
-        isPresent = true;
-        if (index === word.indexOf(letter)) {
-          isCorrectPosition = true;
-          word[index] = "'";
-        }
+      if (word[index] === guessedWord[index]) {
+        summary[index] = { letter, isPresent: true, isCorrectPosition: true };
+        word[index] = "'";
       }
-      summary.push({ letter: letter, isPresent, isCorrectPosition });
+    });
+
+    [...guessedWord].forEach((letter, index) => {
+      if (word.includes(letter) && summary[index] === undefined) {
+        const indexToClear = word.indexOf(letter);
+        summary[index] = { letter, isPresent: true, isCorrectPosition: false };
+        word[indexToClear] = "'";
+      }
+
+      if (word.includes(letter) === false && summary[index] === undefined) {
+        summary[index] = {
+          letter,
+          isPresent: false,
+          isCorrectPosition: false,
+        };
+      }
     });
 
     return summary;
@@ -100,9 +73,9 @@ class Game {
     this.#guessed = this.isGuessCorrect(guessedWord);
     this.#chanceLeft = this.#chanceLeft - 1;
     this.#calculateScore();
-    const correctLetters = this.#countCorrectLetters(guessedWord);
+
     const correctStats = this.#calculateCorrectStats(guessedWord);
-    this.#player.registerGuess(guessedWord, correctLetters, correctStats);
+    this.#player.registerGuess(guessedWord, correctStats);
   }
 
   isGameOver() {
@@ -114,8 +87,9 @@ class Game {
     const guessed = this.#guessed;
     const chanceLeft = this.#chanceLeft;
     const score = this.#score;
+    const word = this.#correctWord;
 
-    return { guessed, guessedHistory, chanceLeft, score };
+    return { guessed, guessedHistory, chanceLeft, score, word };
   }
 }
 
@@ -142,18 +116,13 @@ class Renderer {
     this.chancesLeft = document.querySelector("#chance-left");
     this.guessedHistory = document.querySelector("#guess-history");
     this.scoreElement = document.querySelector("#score");
+    this.correctWordElement = document.querySelector("#correct-word");
   }
 
   #createGuessContainer() {
     const guessContainer = document.createElement("section");
     guessContainer.classList.add("flex-row");
     return guessContainer;
-  }
-
-  #createLetterCountElement(correctLetters) {
-    const correctLettersElement = document.createElement("p");
-    correctLettersElement.innerText = `Correct Letters: ${correctLetters}`;
-    return correctLettersElement;
   }
 
   #renderLetter(correctStats, guessContainer) {
@@ -171,7 +140,7 @@ class Renderer {
         letterElement.classList.add("yellow");
       }
 
-      letterElement.innerText = letter;
+      letterElement.innerText = letter.toUpperCase();
       guessContainer.appendChild(letterElement);
     });
   }
@@ -180,16 +149,11 @@ class Renderer {
     this.guessedHistory.replaceChildren();
 
     guessHistory.forEach((guess) => {
-      const { _, correctLetters, correctStats } = guess;
+      const { correctStats } = guess;
 
       const guessContainer = this.#createGuessContainer();
 
-      const correctLettersElement =
-        this.#createLetterCountElement(correctLetters);
-
       this.#renderLetter(correctStats, guessContainer);
-
-      guessContainer.appendChild(correctLettersElement);
       this.guessedHistory.appendChild(guessContainer);
     });
   }
@@ -199,14 +163,19 @@ class Renderer {
     scoreElement.innerText = `Score: ${Number(score)}`;
   }
 
+  #renderCorrectWord(word) {
+    const correctWordElement = this.correctWordElement;
+    correctWordElement.innerText = `Correct Word: ${word.toUpperCase()}`;
+  }
   render(status) {
-    const { guessed, guessedHistory, chanceLeft, score } = status;
+    const { guessed, guessedHistory, chanceLeft, score, word } = status;
 
     this.resultElement.innerText = guessed ? "Correct" : "Incorrect";
     this.chancesLeft.innerText = chanceLeft;
     this.#renderGuessHistory(guessedHistory);
     if (guessed || chanceLeft === 0) {
       this.#renderScore(score);
+      this.#renderCorrectWord(word);
     }
   }
 }
@@ -222,10 +191,10 @@ window.onload = () => {
     "sight",
     "alarm",
     "force",
-    "wound",
+    "hello",
   ];
 
-  const randomIndex = Math.floor(Math.random() * 10) % 8;
+  const randomIndex = Math.floor(Math.random() * 10) % 1;
   const word = words[randomIndex];
   const totalChance = 6;
   const renderer = new Renderer();
