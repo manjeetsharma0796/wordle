@@ -17,7 +17,7 @@ what are the data that is imported from me
 
 class Player {
   constructor() {
-    this.#playerGuessedHistory = [];
+    this.#wordleGuessedHistory = [];
     this.hasWon = false;  
   }
   
@@ -38,7 +38,7 @@ class Game {
   }
 
   updateGame(guessedWord) {
-    this.#player.registerGuess(guessedWord);
+    this.#wordle.registerGuess(guessedWord);
     this.hasWon = this.isCorrectGuess(guessedWord);
     this.chanceLeft = this.chanceLeft - 1;
   }
