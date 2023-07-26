@@ -5,11 +5,23 @@ class Controller {
     this.gameStorage = gameStorage;
   }
 
-  takeGuess(guessedWord) {
-    this.game.updateGame(guessedWord);
-    const status = { ...this.game.status };
+  #isWordInvalid(guessedWord) {
+    return /[^A-Za-z]/g.test(guessedWord);
+  }
 
+  #isLengthInvalid(guessedWord) {
+    return guessedWord.length !== 5;
+  }
+
+  takeGuess(guessedWord) {
+    if (this.#isWordInvalid(guessedWord)) return;
+    if (this.#isLengthInvalid(guessedWord)) return;
+
+    const upperCaseGuessedWord = guessedWord.toUpperCase();
+    this.game.updateGame(upperCaseGuessedWord);
+    const status = { ...this.game.status };
     const { word, score } = status;
+
     if (this.game.isGameOver()) {
       this.gameStorage.registerScore({ word, score });
     }
@@ -22,4 +34,3 @@ class Controller {
     this.renderer.renderPreviousScore(previousScore);
   }
 }
-
