@@ -23,7 +23,7 @@ const getRandomWord = () => {
 };
 
 const setupGame = (guessButton, guessedWordElement) => {
-  const word = getRandomWord();
+  const word = "THERE";
   const totalChance = 6;
   const wordle = new Wordle(word);
   const game = new Game(wordle, totalChance);
@@ -33,7 +33,7 @@ const setupGame = (guessButton, guessedWordElement) => {
   controller.renderPreviousScore();
 
   guessButton.onclick = () => {
-    const guessedWord = guessedWordElement.value;
+    const guessedWord = guessedWordElement.value.toUpperCase();
     controller.takeGuess(guessedWord);
   };
 };
