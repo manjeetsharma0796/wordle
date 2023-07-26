@@ -22,6 +22,9 @@ class Game {
   #calculateScore() {
     this.#score =
       (this.#totalChance - (this.#totalChance - this.#chanceLeft) + 1) * 10;
+    if (!this.#guessed && this.#chanceLeft === 0) {
+      this.#score = 0;
+    }
   }
 
   isGameOver() {

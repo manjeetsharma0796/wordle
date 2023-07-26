@@ -7,6 +7,7 @@ class Renderer {
     this.guessArea = document.querySelector("#guess-area");
     this.previousScore = document.querySelector("#previous-score");
     this.previousWord = document.querySelector("#previous-word");
+    this.guessButton = document.querySelector("#guess-button");
   }
 
   #createGuessContainer() {
@@ -40,7 +41,6 @@ class Renderer {
 
     guessHistory.forEach((guess) => {
       const { correctStats } = guess;
-
       const guessContainer = this.#createGuessContainer();
 
       this.#renderLetter(correctStats, guessContainer);
@@ -58,27 +58,26 @@ class Renderer {
     correctWordElement.innerText = `Correct Word: ${word.toUpperCase()}`;
   }
 
-  #renderPreviousScore(previousScore) {
-    this.previousScore.innerText = previousScore;
+  #disableGuessButton() {
+    this.guessButton.disabled = true;
   }
-
-  #renderPreviousWord(previousWord) {
-    this.previousWord.innerText = previousWord;
-  }
+  
   render(status) {
     const { guessed, guessedHistory, chanceLeft, score, word } = status;
-    this.#renderPreviousScore();
-    this.#renderPreviousWord();
     this.guessArea.value = "";
     this.chancesLeft.innerText = chanceLeft;
     this.#renderGuessHistory(guessedHistory);
+
     if (chanceLeft === 0 || guessed) {
+      this.#disableGuessButton();
       this.#renderCorrectWord(word);
-      const finalScore = guessed ? score : 0;
-      this.#renderScore(finalScore);
-      localStorage.setItem("previousWord", word);
-      localStorage.setItem("previousScore", finalScore);
+      this.#renderScore(score);
     }
   }
-}
 
+  renderPreviousScore(previousScore) {
+    const { score, word } = previousScore;
+    this.previousScore.innerText = `Previous Score: ${score}`;
+    this.previousWord.innerText = `Previous Word: ${word}`;
+  }
+}
