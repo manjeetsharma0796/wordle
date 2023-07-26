@@ -20,7 +20,8 @@ class Wordle {
     [...guessedWord].forEach((letter, index) => {
       if (word.includes(letter) && stats[index] === undefined) {
         stats[index] = { letter, isPresent: true, isCorrectPosition: false };
-        word[index] = "'";
+        const indexToReplace = word.indexOf(letter);
+        word[indexToReplace] = "'";
       }
 
       if (word.includes(letter) === false && stats[index] === undefined) {
@@ -35,7 +36,7 @@ class Wordle {
 
   calculateLetterStats(guessedWord) {
     const word = [...this.correctWord];
-    const stats = [];
+    const stats = new Array();
     this.#correctLetterEntries(word, guessedWord, stats);
     this.#restLetterEntries(word, guessedWord, stats);
 
