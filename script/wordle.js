@@ -1,6 +1,6 @@
 class Wordle {
   constructor(word) {
-    this.correctWord = word;
+    this.correctWord = word.toUpperCase();
   }
 
   isSame(guessedWord) {
@@ -24,7 +24,7 @@ class Wordle {
         word[indexToReplace] = "'";
       }
 
-      if (word.includes(letter) === false && stats[index] === undefined) {
+      if (stats[index] === undefined) {
         stats[index] = {
           letter,
           isPresent: false,

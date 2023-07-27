@@ -23,7 +23,7 @@ const getRandomWord = () => {
 };
 
 const setupGame = (guessButton, guessedWordElement) => {
-  const word = "THERE";
+  const word = "there";
   const totalChance = 6;
   const wordle = new Wordle(word);
   const game = new Game(wordle, totalChance);

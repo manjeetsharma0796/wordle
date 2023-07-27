@@ -31,7 +31,7 @@ class Renderer {
       const letterElement = document.createElement("p");
 
       this.#appendClassToLetter(letterElement, isPresent, isCorrectPosition);
-      letterElement.innerText = letter.toUpperCase();
+      letterElement.innerText = letter;
       guessContainer.appendChild(letterElement);
     });
   }
@@ -49,19 +49,21 @@ class Renderer {
   }
 
   #renderScore(score) {
-    const scoreElement = this.scoreElement;
-    scoreElement.innerText = `Score: ${Number(score)}`;
+    this.scoreElement.innerText = `Score: ${Number(score)}`;
   }
 
   #renderCorrectWord(word) {
-    const correctWordElement = this.correctWordElement;
-    correctWordElement.innerText = `Correct Word: ${word.toUpperCase()}`;
+    this.correctWordElement.innerText = `Correct Word: ${word.toUpperCase()}`;
   }
 
   #disableGuessButton() {
     this.guessButton.disabled = true;
   }
-  
+
+  #disableGuessArea() {
+    this.guessArea.disabled = true;
+}
+
   render(status) {
     const { guessed, guessedHistory, chanceLeft, score, word } = status;
     this.guessArea.value = "";
@@ -70,6 +72,7 @@ class Renderer {
 
     if (chanceLeft === 0 || guessed) {
       this.#disableGuessButton();
+      this.#disableGuessArea();
       this.#renderCorrectWord(word);
       this.#renderScore(score);
     }

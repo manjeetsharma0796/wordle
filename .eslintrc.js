@@ -4,11 +4,10 @@ module.exports = {
   },
 
   rules: {
-    semi: ["error", "always", { omitLastInOneLineBlock: true }],
-    quotes: ["error", "double"],
-    indent: ["error", 2, { SwitchCase: 1 }],
-
-    complexity: ["error", 2],
+    "semi": ["error", "always", { omitLastInOneLineBlock: true }],
+    "quotes": ["error", "double"],
+    "indent": ["error", 2, { SwitchCase: 1 }],
+    "complexity": ["error", 2],
     "array-callback-return": ["error", { checkForEach: true }],
     "max-depth": ["error", 2],
     "max-statements": ["error", 10],
@@ -22,7 +21,6 @@ module.exports = {
     "id-denylist": ["error", "data", "callback"],
     "no-extra-semi": "error",
     "array-callback-return": ["error"],
-    "no-unused-vars": "error",
     "key-spacing": ["error"],
     "array-callback-return": ["error", { checkForEach: true }],
     "no-cond-assign": "error",
@@ -39,7 +37,6 @@ module.exports = {
     "no-useless-escape": "warn",
     "comma-spacing": ["warn", { before: false, after: true }],
     "max-len": "error",
-    "no-unused-vars": ["error", { destructuredArrayIgnorePattern: "^_" }],
     "complexity": ["warn", 3],
     "comma-spacing": ["error"],
     "no-multi-spaces": ["error"],

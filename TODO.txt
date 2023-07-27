@@ -123,3 +123,11 @@ const summary = {};
   summary[letter] = {isPresent, isCorrectPosition};
   
   })
+
+
+----------
+Bugs
+
+[ ] letter case issue
+[ ] length is not fixed
+[ ] other than letter is allowed

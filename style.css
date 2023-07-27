@@ -43,6 +43,7 @@ body {
   width: 30%;
   height: 40%;
   padding-left: 1em;
+  text-transform: uppercase;
 }
 
 #status {
@@ -56,7 +57,7 @@ body {
   align-items: center;
 }
 
-#guess-history  {
+#guess-history {
   line-height: 2em;
   margin-bottom: 1em;
   display: flex;
@@ -97,5 +98,6 @@ body {
 }
 
 #color-meaning * {
-  padding-bottom: 20px;
+  align-items: center;
+  margin-bottom: 1em;
 }
