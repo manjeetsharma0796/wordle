@@ -46,6 +46,10 @@ body {
   text-transform: uppercase;
 }
 
+#guess-area:focus{
+  outline: 2px solid lightgreen;
+}
+
 #status {
   width: 40%;
   height: 60%;

@@ -66,7 +66,7 @@ class Renderer {
 
   render(status) {
     const { guessed, guessedHistory, chanceLeft, score, word } = status;
-    this.guessArea.value = "";
+    this.guessArea.value = null;
     this.chancesLeft.innerText = chanceLeft;
     this.#renderGuessHistory(guessedHistory);
 

@@ -1,4 +1,4 @@
-class Controller {
+class GameController {
   constructor(game, renderer, gameStorage) {
     this.game = game;
     this.renderer = renderer;

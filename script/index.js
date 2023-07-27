@@ -22,14 +22,17 @@ const getRandomWord = () => {
   return words[randomIndex];
 };
 
-const setupGame = (guessButton, guessedWordElement) => {
-  const word = "there";
+const setupGame = () => {
+  const guessButton = document.querySelector("#guess-button");
+  const guessedWordElement = document.querySelector("#guess-area");
+
+  const word = getRandomWord();
   const totalChance = 6;
   const wordle = new Wordle(word);
   const game = new Game(wordle, totalChance);
   const renderer = new Renderer();
   const gameStorage = new GameStorage();
-  const controller = new Controller(game, renderer, gameStorage);
+  const controller = new GameController(game, renderer, gameStorage);
   controller.renderPreviousScore();
 
   guessButton.onclick = () => {
@@ -39,8 +42,5 @@ const setupGame = (guessButton, guessedWordElement) => {
 };
 
 window.onload = () => {
-  const guessButton = document.querySelector("#guess-button");
-  const guessedWordElement = document.querySelector("#guess-area");
-
-  setupGame(guessButton, guessedWordElement);
+  setupGame();
 };
