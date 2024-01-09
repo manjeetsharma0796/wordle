@@ -1,6 +1,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/10e76347-0a11-49da-9613-a0a13f34c959/deploy-status)](https://app.netlify.com/sites/wordle-manjeet/deploys)
 -----------------
-
+https://main--wordle-manjeet.netlify.app/
+-----------------
 Iteration 1:
 
 - Ask user to guess a 5 letter secret word picked by you and let user know if the guess is correct or not.
