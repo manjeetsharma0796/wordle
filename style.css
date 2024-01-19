@@ -7,17 +7,20 @@
 }
 
 body {
+  background-color:F9FBE7;
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
 }
-
+#header{
+  background-color: FEA1A1;
+}
 #heading {
   height: 5%;
   width: 30%;
+  font-family: "Librebaskervile";
   text-align: center;
   margin: 1em auto;
-  text-decoration: underline;
 }
 
 #input-section {
@@ -35,8 +38,10 @@ body {
 }
 
 #guess-button {
-  width: 15%;
-  height: 40%;
+  background-color: D9D9D9;
+  border-color: black;
+  width:15%;
+  height:40%;
 }
 
 #guess-area {
