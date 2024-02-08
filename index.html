@@ -8,12 +8,17 @@
     <script src="./script/renderer.js"></script>
     <script src="./script/wordle.js"></script>
     <script src="./script/gameStorage.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Caveat">
   </head>
 
   <body>
-    <section id="header">
+    <section id="header" class="header">
+      
       <h1 id="heading">WORDLE</h1>
+      <img class="gif" src="logo.gif">
     </section>
+    
+    
     
     <section id="input-section">
       <input
@@ -22,7 +27,7 @@
         placeholder="Guess word here"
         id="guess-area"
       />
-      <input type="button" value="Guess" id="guess-button" />
+      <input type="button" value="Guess" id="guess-button" class="guess-button" />
     </section>
     
     <section id="color-meaning">
@@ -45,8 +50,9 @@
 
       <section id="guess-history"></section>
       <p>Chance Left: <span id="chance-left">6</span></p>
-      <section id="score"></section>
-      <section id="correct-word"></section>
+      
     </article>
+    <section id="score"></section>
+      <section id="correct-word"></section>
   </body>
 </html>
